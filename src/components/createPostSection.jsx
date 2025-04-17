@@ -1,18 +1,28 @@
 import React, { useState } from 'react'
+import { createPost, sendComment } from '../utils/apiService';
 
-function CreatePostSection({ actionName='Share', handleSubmit }) {
-  if (handleSubmit == undefined) {
-    handleSubmit = () => {
-      // TODO add default: creating new post from user
+function CreatePostSection({ actionName='Share', tweetId }) {
+  const handleSubmit = async() => {
+    if (tweetId == undefined) {
+      await createPost({content: text})
+    } else {
+      await sendComment({comment: text, tweetId: tweetId})
     }
   }
-  const [text, setText] = useState('');
+  
+  const username = localStorage.getItem('username')
+  const [text, setText] = useState('')
 
   const handleInput = (event) => {
-    setText(event.target.value);
-    event.target.style.height = 'auto'; 
-    event.target.style.height = event.target.scrollHeight + 'px';
-  };
+    setText(event.target.value)
+    event.target.style.height = 'auto'
+    event.target.style.height = event.target.scrollHeight + 'px'
+  }
+
+  const handleClick = (event) => {
+    event.preventDefault
+    handleSubmit(text)
+  }
 
   return (
     <section id='side-create-post-section' className='elevated-container create-post-section'>
@@ -21,7 +31,7 @@ function CreatePostSection({ actionName='Share', handleSubmit }) {
         <div className='v-flex'>
           <p>
             <b>You</b> <br></br>
-            <span className='text-dim'>@carloscachlos</span> 
+            <span className='text-dim'>@{username}</span> 
           </p>
         </div>
       </div>
@@ -36,7 +46,8 @@ function CreatePostSection({ actionName='Share', handleSubmit }) {
           onChange={handleInput}
         >
         </textarea>
-        <button onClick={() => handleSubmit(text)}>{actionName}</button>
+        <button onClick={handleClick}>{actionName}</button>
+        <p id='message' style={{display: "none", margin: 0}}></p>
       </form>
 
     </section>

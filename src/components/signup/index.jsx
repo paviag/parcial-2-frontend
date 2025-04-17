@@ -1,8 +1,8 @@
 import React from 'react'
 import BaseForm from '../baseForm';
+import { signup } from '../../utils/apiService';
 
 function SignUp() {
-  // TODO add action onsubmit that takes the form data (it is properly formatted)
   const inputData = {
     'Name': 'text',
     'Username': 'text',
@@ -15,7 +15,8 @@ function SignUp() {
       inputData={inputData} 
       formTitle='Register' 
       actionName='Sign up' 
-      onSubmit={() => {}}
+      onSubmit={signup}
+      redirectAddress={'/'}
     />
   )
 }

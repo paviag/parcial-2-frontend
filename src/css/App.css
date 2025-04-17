@@ -26,6 +26,7 @@
 
 #main-content {
   display: flex;
+  flex-grow: 1;
   h1 {
     margin-bottom: 10px;
     margin-top: 20px;
@@ -169,7 +170,7 @@
 }
 @media (max-width: 900px) {
   .posts-list {
-    padding: 10px 0 0;
+    padding: 10px 0 30px;
   }
 }
 

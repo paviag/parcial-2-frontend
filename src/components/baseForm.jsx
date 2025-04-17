@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import '../css/App.css'
 import IconTitleContainer from './iconTitleContainer'
+import { useNavigate } from 'react-router-dom'
 
 function BaseInput({ name, identifier, type, onChange }) {
   return (
@@ -16,7 +17,8 @@ function stringToCamelCase(str) {
   return [words[0].toLowerCase(), ...words.slice(1)].join('')
 }
 
-function BaseForm({ inputData, formTitle, actionName, onSubmit }) {
+function BaseForm({ inputData, formTitle, actionName, onSubmit, redirectAddress }) {
+  const nav = useNavigate()
   const [data, setData] = useState(
     Object.keys(inputData).reduce((acc, name) => {
       acc[stringToCamelCase(name)] = ''
@@ -26,9 +28,14 @@ function BaseForm({ inputData, formTitle, actionName, onSubmit }) {
 
   const handleChange = (event, identifier) => {
     setData({ ...data, [identifier]: event.target.value })
-    console.log(data)
   };
 
+  const handleSubmit = async(event) => {
+    event.preventDefault()
+    await onSubmit(data)
+    nav(redirectAddress)
+  }
+  
   return (
     <>
       <div className='logo-top-bar'>
@@ -41,12 +48,14 @@ function BaseForm({ inputData, formTitle, actionName, onSubmit }) {
           return <BaseInput 
             key={identifier}
             name={name} 
-            type={inputData[identifier]}
+            identifier={identifier}
+            type={inputData[name]}
             onChange={(e) => handleChange(e, identifier)} 
             value={data[identifier]}
             />
         })}
-        <button onClick={() => onSubmit(data)}>{actionName}</button>
+        <button onClick={handleSubmit}>{actionName}</button>
+        <p id='message'></p>
       </form>
     </>
   )
