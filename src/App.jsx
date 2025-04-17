@@ -8,6 +8,7 @@ import Login from './components/login'
 import NavBar from './components/Navbar'
 import SignUp from './components/signup'
 import PostPage from './components/postPage'
+import AuthLayout from './components/authLayout'
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -31,30 +32,34 @@ const Layout = ({ children }) => {
         {location.pathname.startsWith('/post/') ? <></> : <CreatePostSection />}
       </section>
     </div>
-  );
-};
+  )
+}
 
 const App = () => {
-  const [loading, setLoading] = useState(false)
-
-  if (loading) {
-    return <div>Loading...</div>
-  }
-
   return (
     <Router>
       <Layout>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<Home />} />
-          <Route path="/profile" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/post/:id" element={<PostPage />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<SignUp />} />
+          
+          <Route
+            path='/*'
+            element={
+              <AuthLayout>
+                <Routes>
+                  <Route path='/' element={<Home />} />
+                  <Route path='/search' element={<Home />} />
+                  <Route path='/profile' element={<Home />} />
+                  <Route path='/post/:id' element={<PostPage />} />
+                </Routes>
+              </AuthLayout>
+            }
+          />
         </Routes>
       </Layout>
     </Router>
-  );
-};
+  )
+}
 
 export default App

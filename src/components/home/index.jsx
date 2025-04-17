@@ -1,14 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../css/App.css'
 import PostItem from '../postItem';
+import { getTimelinePosts } from '../../utils/apiService';
 
 function Home() {
-  // TODO fetch posts with api
+  const [posts, setPosts] = useState([])
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const data = await getTimelinePosts()
+      setPosts(data)
+    }
+    fetchPosts()
+  }, [])
+
   return (
     <div className='posts-list'>
       <h1>Following</h1>
-      {Array.from(Array(15).keys()).map((n) => {
-        return <PostItem key={n} />
+      {posts.map((postData) => {
+        return <PostItem key={postData._id} tweetData={postData} />
       })}
     </div>
   )
